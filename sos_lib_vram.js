@@ -171,18 +171,17 @@ var sos_lib_vram = {
 
     // Check "active" cache.
     if(!!Memory.sos.vram.c[key]) {
-      Logger.highlight(Memory.sos.vram.c[key].t)
       if(Memory.sos.vram.c[key].t >= Game.time) {
-        Logger.highlight('Saving to cache')
+        console.log('Saving to cache')
         Memory.sos.vram.c[key].d = value
       } else {
-        Logger.highlight('Saving segment after timeout')
+        console.log('Saving segment after timeout')
         sos.lib.segments.saveObject(key, value)
         delete Memory.sos.vram.c[key]
       }
       return
     }
-    Logger.highlight('Saving segment')
+    console.log('Saving segment')
     sos.lib.segments.saveObject(key, value)
   }
 

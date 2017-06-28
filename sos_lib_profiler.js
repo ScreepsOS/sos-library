@@ -21,7 +21,7 @@ var sos_lib_profiler = {
   end: function (token) {
     var finished = Game.cpu.getUsed()
     if(!this.__running[token]) {
-      Logger.log('Profiler: no data found', LOG_ERROR)
+      console.log('Profiler: no data found', LOG_ERROR)
       return false
     }
 
@@ -38,7 +38,7 @@ var sos_lib_profiler = {
       Stats.addStat(index, send, true)
     }
 
-    Logger.log("Profiler\t" + meta.name + "\t" + cpu.toPrecision(4) + " cpu", LOG_INFO, false, {'profiler':true,block:meta.name})
+    console.log("Profiler\t" + meta.name + "\t" + cpu.toPrecision(4) + " cpu", LOG_INFO, false, {'profiler':true,block:meta.name})
     delete this.__running[token]
     return true
   }

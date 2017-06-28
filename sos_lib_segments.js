@@ -91,7 +91,7 @@ var sos_lib_segments = {
         var start = Game.cpu.getUsed()
         var data = JSON.parse(stringdata)
         var parseTime = Game.cpu.getUsed() - start
-        Logger.log('Segment ' + label + ' parse time: ' + parseTime + ' with length ' + stringdata.length, LOG_WARN)
+        console.log('Segment ' + label + ' parse time: ' + parseTime + ' with length ' + stringdata.length, LOG_WARN)
         Stats.addStat('segments.' + label, {
           'label': label,
           'parseTime': parseTime,
@@ -401,7 +401,7 @@ var sos_lib_segments = {
           public_segments = public_segments.concat(segments)
       }
     }
-    Logger.highlightData(public_segments)
+    console.logData(public_segments)
     RawMemory.setPublicSegments(public_segments)
   },
 
