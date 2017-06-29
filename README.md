@@ -4,6 +4,14 @@
 
 Copy files into your screeps directory.
 
+### Dependencies
+
+The `cache` and `broadcaster` modules have the ability to compress data using
+[`lzstring`](https://github.com/pieroxy/lz-string) as long as the library is
+available. To install it simply copy [this file](https://raw.githubusercontent.com/pieroxy/lz-string/master/libs/lz-string.js)
+to your screeps directory as `lib_lzstring`.
+
+
 ## Usage
 
 ### Loading

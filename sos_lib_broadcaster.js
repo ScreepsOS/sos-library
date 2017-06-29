@@ -51,6 +51,15 @@ module.exports.updateChannel = function (channel, data, opts={}) {
     opts.data = JSON.stringify(opts.data)
   }
 
+  if(!!opts.compress) {
+    try {
+      var LZString = require('lib_lzstring')
+      opts.data = LZString.compressToUTF16()      
+    } catch (err) {
+      delete opts.compress
+    }
+  }
+
   // Key is a *label*, not a specific key.
   if(!!opts.key) {
     opts.data = sos.lib.crypto.encrypt(opts.data, opts.key)
