@@ -54,7 +54,14 @@ module.exports.updateChannel = function (channel, data, opts={}) {
   if(!!opts.compress) {
     try {
       var LZString = require('lib_lzstring')
-      opts.data = LZString.compressToUTF16()      
+      var data =  LZString.compressToUTF16(opts.data)
+      if(data.length < MAX_DATA_EMBED) {
+        opts.data = data
+      } else if(Math.ceil(data.length / (1024*1024)) < Math.ceil(opts.data.length / (1024*1024))) {
+        opts.data = data
+      } else {
+        delete opts.compress
+      }
     } catch (err) {
       delete opts.compress
     }
