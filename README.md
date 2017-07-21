@@ -18,7 +18,7 @@ to your screeps directory as `lib_lzstring`.
 
 ```javascript
 // Initialize library into global for easy access.
-Global.sos_lib = require('sos_lib')
+global.sos_lib = require('sos_lib')
 ```
 
 
