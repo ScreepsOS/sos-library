@@ -34,7 +34,6 @@ var sos_lib_profiler = {
       send.block = meta.name
       send.category = meta.category
       send.cpu = cpu
-      send.loggroup = Logger.defaultLogGroup
       Stats.addStat(index, send, true)
     }
 

@@ -19,7 +19,7 @@ module.exports.saveIndexSegment = function (makedefault=true) {
 
   var segmentdata = {
     api: {
-      'version': 'draft',
+      'version': 'v1.0.0',
       'update': Game.time,
     },
     'channels': {}
@@ -55,9 +55,7 @@ module.exports.updateChannel = function (channel, data, opts={}) {
     try {
       var LZString = require('lib_lzstring')
       var data =  LZString.compressToUTF16(opts.data)
-      if(data.length < MAX_DATA_EMBED) {
-        opts.data = data
-      } else if(Math.ceil(data.length / (1024*1024)) < Math.ceil(opts.data.length / (1024*1024))) {
+      if(Math.ceil(data.length / (1024*1024)) < Math.ceil(opts.data.length / (1024*1024))) {
         opts.data = data
       } else {
         delete opts.compress

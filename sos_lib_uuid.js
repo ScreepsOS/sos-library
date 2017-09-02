@@ -1,4 +1,12 @@
 
+var shardid = false
+if(Game.shard) {
+  var matches = Game.shard.name.match(/\d+$/);
+  if (matches) {
+    shardid = parseInt(matches[0]).toString(36);
+  }
+}
+
 var sos_lib_uuid = {
   index: 0,
   tick: Game.time,
@@ -22,7 +30,11 @@ var sos_lib_uuid = {
       this.tick = Game.time
     }
     this.index++
-    return Game.time.toString(36) + this.index.toString(36).leftPad(3, '0')
+    var base = Game.time.toString(36) + this.index.toString(36).leftPad(3, '0')
+    if(shardid !== false) {
+      base = shardid + base
+    }
+    return base
   }
 }
 

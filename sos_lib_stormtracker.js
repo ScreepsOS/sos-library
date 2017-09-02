@@ -70,6 +70,14 @@ class StormTracker {
 
   }
 
+  getNormalNodeCount() {
+    // assume 1
+    if(!Memory.sos || !Memory.sos.st || !Memory.sos.st.min) {
+      return 1
+    }
+    return Memory.sos.st.min
+  }
+
   isStorming() {
     if(this.nodes.length > this.memory.min.c * 2.5) {
       for(var nodeid of Object.keys(this.memory.nodes)) {

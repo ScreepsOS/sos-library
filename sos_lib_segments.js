@@ -91,7 +91,7 @@ var sos_lib_segments = {
         var start = Game.cpu.getUsed()
         var data = JSON.parse(stringdata)
         var parseTime = Game.cpu.getUsed() - start
-        console.log('Segment ' + label + ' parse time: ' + parseTime + ' with length ' + stringdata.length, LOG_WARN)
+        console.log('Segment ' + label + ' parse time: ' + parseTime + ' with length ' + stringdata.length)
         Stats.addStat('segments.' + label, {
           'label': label,
           'parseTime': parseTime,
@@ -394,15 +394,17 @@ var sos_lib_segments = {
     }
 
     // Send list of segments to make public
-    var public_segments = []
-    for(var label of Memory.__segindex.public) {
-      var segments = this.getIndexByLabel(label)
-      if(segments) {
-          public_segments = public_segments.concat(segments)
+    // setPublicSegments isn't in the sim
+    if(!!RawMemory.setPublicSegments) {
+      var public_segments = []
+      for(var label of Memory.__segindex.public) {
+        var segments = this.getIndexByLabel(label)
+        if(segments) {
+            public_segments = public_segments.concat(segments)
+        }
       }
+      RawMemory.setPublicSegments(public_segments)
     }
-    console.logData(public_segments)
-    RawMemory.setPublicSegments(public_segments)
   },
 
   getNextId: function() {
@@ -447,6 +449,72 @@ var sos_lib_segments = {
     }
   },
 
+  getUsedSegmentList: function () {
+    var inUse = []
+    for(var label in Memory.__segindex.index) {
+      inUse = inUse.concat(Memory.__segindex.index[label].ids)
+    }
+    inUse = inUse.concat(_.values(Memory.__segindex.clear))
+    return inUse
+  },
+
+  getUsagePercentage: function (label = false, limitToControlled = true) {
+    if(label) {
+      var id_list = this.getIndexByLabel(label, false).length
+      if(!id_list || id_list <= 0) {
+        return 0
+      }
+      var current = id_list
+    } else {
+      var current = this.getUsedSegmentList().length
+      if(current.length <= 0) {
+        return 0
+      }
+    }
+    if(limitToControlled) {
+      var max = ((this.max+1) - this.min)
+      if(max <= 0) {
+        return 1
+      }
+    } else {
+      var max = 100
+    }
+
+    return current / max
+  },
+
+  clearAll: function (confirm=false) {
+    if(!confirm) {
+      return false
+    }
+    Memory.__segindex = {
+      'index': {},
+      'savelog': {},
+      'buffer': {},
+      'ttls': {},
+      'clear': [],
+      'critical': [],
+      'last': 100
+    }
+
+    // Remove "active" segments for cleaner logic.
+    var segkeys = Object.keys(RawMemory.segments)
+    for(var key in segkeys) {
+      delete RawMemory.segments[key]
+    }
+
+    // The first segments should be cleared and made available for used
+    // immediately, while the rest get queues.
+    var clearnow = 10
+    for (var i = this.min; i <= this.max; i++) {
+      if(clearnow >= 1) {
+        RawMemory.segments[i] = ''
+        clearnow--
+      } else {
+        Memory.__segindex.clear.push(i)
+      }
+    }
+  }
 }
 
 
